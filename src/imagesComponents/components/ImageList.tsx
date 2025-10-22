@@ -1,4 +1,4 @@
-import type { robotsProps } from '../../mock-data/robots.mocks'
+import type { robotsProps } from "../../interfaces/images.interfaces"
 
 
 interface Props {
@@ -7,6 +7,14 @@ interface Props {
 
 
 export const ImageList = ({ robots }:Props) => {
+
+  console.log("En mi image list", robots);
+
+  // Verificación para evitar errores
+  if (!robots || robots.length === 0) {
+    return <div>No hay robots disponibles</div>;
+  }
+
   return (
      <div className="gifs-container">
         {

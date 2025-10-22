@@ -1,11 +1,12 @@
-import { useState } from 'react'
-
-import { HeaderComponents , SearchBar  } from './sharedComponents'
+import { cacheSignal, useEffect, useState } from 'react'
 import { ImageList , PreviousSearches } from './imagesComponents'
 
-import { getImagesByQuery } from './actions/get-images-by-query2.actions'
+import { HeaderComponents , SearchBar  } from './sharedComponents'
 
-import { robots } from './mock-data/robots.mocks'
+import { getImagesByQuery } from './actions/get-images-by-query2.actions'
+import { getImages } from './actions/get-images.actions'
+
+import type { robotsProps } from './interfaces/images.interfaces';
 
 import './index.css'
 
@@ -13,8 +14,25 @@ import './index.css'
 
 export const ImageApp = () => {
 
-  const [ imagenPrevia , setImagenPrevia ] = useState(['']);
+  const [ imagenPrevia , setImagenPrevia ] = useState(['']);    
+  const [images, setImages] = useState<robotsProps[]>([]);
 
+  useEffect(()=> {
+    const fetchData = async() => {
+      try{
+          const data = await getImages();
+          const robots = data.robots;
+          //console.log(robots);
+          setImages(robots);
+          
+      }catch(error){
+        console.error('Error en fetchin data',error);
+      }
+    }
+
+    fetchData();
+    
+  },[])
 
   const handleTermClicked = ( term:string ) => {
     console.log({ term });
@@ -63,7 +81,7 @@ export const ImageApp = () => {
 
         
         <ImageList 
-            robots={ robots } />
+            robots={ images } />
        
     </>
   )
